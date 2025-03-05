@@ -44,7 +44,6 @@ function oneSampleTTest(
     (sampleMean - populationMean) / (sampleStdDev / Math.sqrt(n));
 
   // Compute degrees of freedom
-  console.log(sampleMean, variance, sampleStdDev, tStatistic);
   const df = n - 1;
 
   // Compute p-value using the jStat library
