@@ -1,6 +1,7 @@
 import multer from 'multer';
 import fs from 'fs';
 import path from 'path';
+import xlsx from 'xlsx';
 
 const __dirname = path.resolve();
 
@@ -68,3 +69,29 @@ export const removeFile = async (filesArray) => {
     });
   });
 };
+
+export function getDataByHeader(filePath, headerName) {
+  // Load the workbook
+  const workbook = xlsx.readFile(filePath);
+  const dataByHeader = {};
+
+  workbook.SheetNames.forEach((sheetName) => {
+    const worksheet = workbook.Sheets[sheetName];
+    const jsonData = xlsx.utils.sheet_to_json(worksheet, { header: 1 });
+
+    if (jsonData.length > 0) {
+      // Extract headers (first row)
+      const headers = jsonData[0];
+
+      // Find the index of the given header name
+      const index = headers.indexOf(headerName);
+
+      if (index !== -1) {
+        // Extract all column values under that header
+        const columnData = jsonData.slice(1).map((row) => row[index]);
+        dataByHeader[sheetName] = columnData;
+      }
+    }
+  });
+  return dataByHeader;
+}
