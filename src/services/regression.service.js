@@ -1,13 +1,13 @@
-export function calcLinearReg(independent, dependent) {
-  if (!Array.isArray(independent) || !Array.isArray(dependent)) {
-    throw new Error('Both independent and dependent must be arrays.');
-  }
-  if (independent.length === 0 || dependent.length === 0) {
-    throw new Error('Input arrays must not be empty.');
-  }
-  if (independent.length !== dependent.length) {
-    throw new Error('Both arrays must have the same length.');
-  }
+import { getDataByHeader } from '../utils/file.util';
+import path from 'path';
+
+export function calcLinearReg(req) {
+  const { independentName, dependentName, fileName } = req.body;
+  const curPath = `${path.resolve()}/public/${fileName}`;
+
+  const independent = getDataByHeader(curPath, independentName).Data;
+  const dependent = getDataByHeader(curPath, dependentName).Data;
+  console.log(independent, dependent);
 
   let n = independent.length;
   let sumX = 0,
@@ -54,12 +54,3 @@ export function calcLinearReg(independent, dependent) {
     standardError: standardError.toFixed(4)
   };
 }
-
-// Example Usage
-const independent = [1, 2, 3, 4, 5]; // x values
-const dependent = [2, 3, 5, 7, 11]; // y values
-
-const result = calcLinearReg(independent, dependent);
-
-// Output result
-console.log(result);

@@ -7,7 +7,6 @@ export const calcSingle_t_test = (req, res) => {
   const curPath = `${path.resolve()}/public/${fileName}`;
 
   const sampleData = getDataByHeader(curPath, headerName);
-  console.log(sampleData.Data);
   const testResult = oneSampleTTest(
     sampleData.Data,
     populationMean,
