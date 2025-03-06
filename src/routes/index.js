@@ -3,6 +3,7 @@ const router = express.Router();
 
 import userRoute from './user.route';
 import testsRoute from './statisticalTests.route';
+import regressionRoute from './regression.route';
 /**
  * Function contains Application routes
  *
@@ -14,6 +15,7 @@ const routes = () => {
   });
   router.use('/users', userRoute);
   router.use('/tests', testsRoute);
+  router.use('/regression', regressionRoute);
 
   return router;
 };
