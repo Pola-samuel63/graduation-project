@@ -5,7 +5,11 @@ import { single_t_test } from '../controllers/statisticalTests.controller';
 const router = express.Router();
 
 router.post('/upload', uploadFile(), processFile(), (req, res) => {
-  res.json({ message: 'Upload successful', files: req.body.files });
+  try {
+    res.json({ message: 'Upload successful', files: req.body.files });
+  } catch (error) {
+    res.json({ message: error.message, error: error });
+  }
 });
 
 router.get('/single-t-test', single_t_test);
