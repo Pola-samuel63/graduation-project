@@ -12,6 +12,6 @@ router.post('/upload', uploadFile(), processFile(), (req, res) => {
   }
 });
 
-router.get('/single-t-test', single_t_test);
+router.post('/single-t-test', single_t_test);
 
 export default router;

@@ -6,7 +6,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 
 import routes from './routes';
-import database from './config/database';
+
 import {
   appErrorHandler,
   genericErrorHandler,

@@ -3,6 +3,6 @@ import { linearReg } from '../controllers/regression.controller';
 
 const router = express.Router();
 
-router.get('/linear', linearReg);
+router.post('/linear', linearReg);
 
 export default router;

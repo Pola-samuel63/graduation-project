@@ -7,7 +7,12 @@ export function calcLinearReg(req) {
 
   const independent = getDataByHeader(curPath, independentName).Data;
   const dependent = getDataByHeader(curPath, dependentName).Data;
-  console.log(independent, dependent);
+
+  if (!independent || !dependent)
+    throw new Error('there is no column with this name');
+
+  validateData(independent);
+  validateData(dependent);
 
   let n = independent.length;
   let sumX = 0,
@@ -53,4 +58,20 @@ export function calcLinearReg(req) {
     coefficientOfDetermination: rSquared.toFixed(4),
     standardError: standardError.toFixed(4)
   };
+}
+
+function validateData(sampleData) {
+  if (!Array.isArray(sampleData)) {
+    throw new Error('Data is not an array.');
+  }
+
+  const isValid = sampleData.every(
+    (item) => typeof item === 'number' && !isNaN(item)
+  );
+
+  if (!isValid) {
+    throw new Error('Invalid data: All elements must be numbers.');
+  }
+
+  return true;
 }

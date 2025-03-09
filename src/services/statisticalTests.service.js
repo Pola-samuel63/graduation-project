@@ -2,11 +2,13 @@ import { getDataByHeader } from '../utils/file.util';
 import path from 'path';
 import jStat from 'jstat';
 
-export const calcSingle_t_test = (req, res) => {
+export const calcSingle_t_test = (req) => {
   const { populationMean, fileName, headerName, alpha, alternative } = req.body;
   const curPath = `${path.resolve()}/public/${fileName}`;
 
   const sampleData = getDataByHeader(curPath, headerName);
+  if (!sampleData) throw new Error('there is no column with this name');
+  validateData(sampleData.Data);
   const testResult = oneSampleTTest(
     sampleData.Data,
     populationMean,
@@ -66,4 +68,20 @@ function oneSampleTTest(
       : 'Fail to reject the null hypothesis';
 
   return { tStatistic, pValue, degreesOfFreedom: df, alternative, decision };
+}
+
+function validateData(sampleData) {
+  if (!Array.isArray(sampleData)) {
+    throw new Error('Data is not an array.');
+  }
+
+  const isValid = sampleData.every(
+    (item) => typeof item === 'number' && !isNaN(item)
+  );
+
+  if (!isValid) {
+    throw new Error('Invalid data: All elements must be numbers.');
+  }
+
+  return true;
 }
