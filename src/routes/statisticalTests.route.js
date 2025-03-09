@@ -1,6 +1,7 @@
 import express from 'express';
 import { processFile, uploadFile } from '../utils/file.util';
 import { single_t_test } from '../controllers/statisticalTests.controller';
+import { validate_t_testRequest } from '../validators/t-test.validator';
 
 const router = express.Router();
 
@@ -12,6 +13,6 @@ router.post('/upload', uploadFile(), processFile(), (req, res) => {
   }
 });
 
-router.post('/single-t-test', single_t_test);
+router.post('/single-t-test', validate_t_testRequest, single_t_test);
 
 export default router;
