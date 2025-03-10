@@ -5,8 +5,8 @@ export function calcLinearReg(req) {
   const { independentName, dependentName, fileName } = req.body;
   const curPath = `${path.resolve()}/public/${fileName}`;
 
-  const independent = getDataByHeader(curPath, independentName).Data;
-  const dependent = getDataByHeader(curPath, dependentName).Data;
+  const independent = getDataByHeader(curPath, independentName);
+  const dependent = getDataByHeader(curPath, dependentName);
 
   if (!independent || !dependent)
     throw new Error('there is no column with this name');

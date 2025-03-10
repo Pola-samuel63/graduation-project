@@ -8,14 +8,14 @@ export const calcSingle_t_test = (req) => {
 
   const sampleData = getDataByHeader(curPath, headerName);
   if (!sampleData) throw new Error('there is no column with this name');
-  validateData(sampleData.Data);
+  validateData(sampleData);
   const testResult = oneSampleTTest(
-    sampleData.Data,
+    sampleData,
     populationMean,
     alpha,
     alternative
   );
-  console.log(sampleData, testResult);
+
   return testResult;
 };
 
@@ -71,6 +71,7 @@ function oneSampleTTest(
 }
 
 function validateData(sampleData) {
+  console.log(sampleData);
   if (!Array.isArray(sampleData)) {
     throw new Error('Data is not an array.');
   }
