@@ -83,11 +83,49 @@ export function getDataByHeader(filePath, headerName) {
       const index = headers.indexOf(headerName);
 
       if (index !== -1) {
-        const columnData = jsonData.slice(1).map((row) => row[index]);
+        let columnData = jsonData.slice(1).map((row) => row[index]);
+
+        columnData = columnData
+          .map((item) => (typeof item === 'string' ? item.trim() : item))
+          .map((item) => cleanNumericData(item))
+          .filter((item) => item !== undefined && item !== null && item !== '');
         dataByHeader = dataByHeader.concat(columnData); // Merge into the array
       }
     }
   });
 
-  return dataByHeader;
+  return dataByHeader; // Keeping duplicates as they are
+}
+
+function cleanNumericData(value) {
+  if (typeof value === 'number') return value; // Already a valid number
+
+  if (typeof value === 'string') {
+    value = value.trim();
+
+    // Handle values inside parentheses (e.g., "(500)" → "-500")
+    if (value.startsWith('(') && value.endsWith(')')) {
+      value = '-' + value.slice(1, -1);
+    }
+
+    // Remove non-numeric characters except dots and commas
+    value = value.replace(/[^0-9.,-]/g, '');
+
+    // Convert to a proper number
+    if (value.includes(',')) {
+      const parts = value.split(',');
+      if (parts.length === 2 && parts[1].length <= 2) {
+        // Case: "1,234.56" (handle comma as thousands separator)
+        value = value.replace(/,/g, '');
+      } else {
+        // Case: "1.234,56" (handle comma as decimal separator)
+        value = value.replace('.', '').replace(',', '.');
+      }
+    }
+
+    const num = parseFloat(value);
+    return isNaN(num) ? null : num; // Return null if not a valid number
+  }
+
+  return null; // Ignore any non-string and non-number values
 }
